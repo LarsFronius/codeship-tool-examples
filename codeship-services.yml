@@ -12,4 +12,3 @@ data:
   image: busybox
   volumes:
     - ./tmp:/artifacts
-
