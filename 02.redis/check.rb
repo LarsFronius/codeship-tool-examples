@@ -19,3 +19,9 @@ Retriable.retriable on: [ Errno::ECONNREFUSED, Redis::CannotConnectError ] do
 	@redis.set "foo", "bar"
 end
 exit_if_not @redis.get("foo"), "bar"
+
+@output = ""
+100000000.times do
+  @output += "foo"
+end
+puts @output
