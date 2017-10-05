@@ -2,10 +2,13 @@
   build:
     image: 01demodockerfile
     dockerfile_path: 01.dockerfile/Dockerfile
+  cached: true
 01demodockerfiledockercompose:
   build: ./01.dockerfile/
+  cached: true
 01demohub:
   image: ruby:2.2.0
+  cached: true
 02demo:
   build:
     image: 02myapp
@@ -13,6 +16,7 @@
     path: 02.redis/
   links:
     - redis
+  cached: true
 03demo:
   build:
     image: 03myapp
@@ -21,16 +25,20 @@
   links:
     - redis
     - postgres
+  cached: true
 04demo:
   image: busybox
+  cached: true
 05demo1:
   image: busybox
   environment:
     OUTPUT: test1
+  cached: true
 05demo2:
   image: busybox
   environment:
     OUTPUT: test2
+  cached: true
 07write:
   build:
     image: 07demowrite
@@ -38,56 +46,69 @@
     path: 07.volumes/
   volumes_from:
     - 07data
+  cached: true
 07read:
   image: busybox
   volumes_from:
     - 07data
+  cached: true
 07data:
   image: busybox
   volumes:
     - ./07.volumes/tmp/:/artifacts
+  cached: true
 08compiledemo:
   build: ./08.deployment-container
   dockerfile: Dockerfile.build
   volumes:
     - ./08.deployment-container/tmp/:/data
+  cached: true
 08deploy:
   build: ./08.deployment-container
   dockerfile: Dockerfile
   volumes_from:
     - 08compiledemo
+  cached: true
 08builder:
   build: ./08.deployment-container
   dockerfile: Dockerfile.builder
   add_docker: true
   volumes_from:
     - 08compiledemo
+  cached: true
 08app1:
   image: 08testimage1
+  cached: true
 08app2:
   build: ./08.deployment-container
   dockerfile: Dockerfile.app2
+  cached: true
 11busybox:
   build: ./11.encrypted-aes
   encrypted_env_file: 11.encrypted-aes/environment.encrypted.ci
+  cached: true
 15data:
   image: busybox
   volumes:
     - /data
+  cached: true
 15app:
   build: ./15.parallel-output-to-volume
   volumes_from:
     - 15data
+  cached: true
 16demo:
   build:
     image: quay.io/codeship/codeship-tool-examples
     dockerfile_path: Dockerfile
     path: 16.docker_push
+  cached: true
 18app:
   build:
     dockerfile_path: Dockerfile.app
     path: 18.load-balancer
   command: ./app
+  cached: true
 18lb:
   build:
     dockerfile_path: Dockerfile.lb
@@ -97,37 +118,45 @@
     - 18app:app2
   ports:
     - "8080:80"
+  cached: true
 18test:
   build:
     dockerfile_path: Dockerfile.ci
     path: 18.load-balancer
   links:
     - 18lb:lb
+  cached: true
 19demo:
   build:
     image: quay.io/codeship/codeship-tool-examples
     dockerfile_path: Dockerfile
     path: 19.dockercfg-service
+  cached: true
 19dockercfg_generator:
   build: 
     dockerfile_path: Dockerfile.generator
     path: 19.dockercfg-service
   encrypted_env_file: dockercfg.env.encrypted
-20buildargs:
-  build:
-    path: 20.build-args
-    dockerfile: Dockerfile
-    args:  
-      UNENCRYPTED: "my-unencrypted-build-arg"
-    encrypted_args_file: 20.build-args/build_args.encrypted
-    encrypted_args: n3gGLaQfbmNKz8ZVez+HS9/82LZBVP/+Sea2sD91cpdY69G2LF+CE54gOSOaGH7E8g==
+  cached: true
+# 20buildargs:
+#  build:
+#    path: 20.build-args
+#    dockerfile: Dockerfile
+#    args:  
+#      UNENCRYPTED: "my-unencrypted-build-arg"
+#    encrypted_args_file: 20.build-args/build_args.encrypted
+#    encrypted_args: n3gGLaQfbmNKz8ZVez+HS9/82LZBVP/+Sea2sD91cpdY69G2LF+CE54gOSOaGH7E8g==
+#  cached: true
 redis:
   image: redis:3.2.8
+  cached: true
 postgres:
-   image: postgres:9.3.6
+  image: postgres:9.3.6
+  cached: true
 busybox:
   image: busybox
+  cached: true
 adddocker:
   image: docker:1.9-dind
   add_docker: true
-
+  cached: true
