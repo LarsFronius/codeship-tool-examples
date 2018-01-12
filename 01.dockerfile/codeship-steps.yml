@@ -1,5 +1,7 @@
 - service: demodockerfile
   command: ruby --version
+- service: demodockerfile
+  command: curl ipinfo.io/ip
 - service: demohub
   command: ruby --version
 - service: demodockerfiledockercompose
